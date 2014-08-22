@@ -35,7 +35,7 @@ class TopicsController < ApplicationController
  def update
   @topic = Topic.find(params{:id})
   authorize @topic
-  if @topic.update_attributes(params.require(topic_params)
+  if @topic.update_attributes(topic_params)
     redirect_to @topic
   else
     flash[:error] = "There was an error updating the topic. Please try again."
