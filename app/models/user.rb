@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
 
   has_many :posts
     mount_uploader :avatar, AvatarUploader
+  has_many :comments
 
  def role?(base_role)
    role == base_role.to_s
