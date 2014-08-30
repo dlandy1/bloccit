@@ -44,7 +44,7 @@ class ApplicationPolicy
     user = @user
     record = @record.user
 
-    (record == user || user.role?(:admin) || user.role?(:moderator))
+    user.present? &&(record == user || user.role?(:admin) || user.role?(:moderator))
   end
 end
 
