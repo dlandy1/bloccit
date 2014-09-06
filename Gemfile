@@ -61,6 +61,7 @@ gem 'mini_magick'
 gem 'fog'
 
 gem 'kaminari'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

@@ -7,10 +7,10 @@ class CommentsController < ApplicationController
     @comment.post = @post
     authorize @comment
     if @comment.save
-       redirect_to [@topic, @post], notice: "Comment was created successfully."
+        render template: "posts/show", notice: "Comment was created successfully."
     else
       flash[:error] = "Error creating comment. It must be more than 5 characters. Please try again."
-      redirect_to [@topic, @post]
+      render template: "posts/show"
     end
   end
 
@@ -22,10 +22,10 @@ class CommentsController < ApplicationController
     authorize @comment
     if @comment.destroy
       flash[:notice] = "Comment was removed"
-      redirect_to [@topic, @post]
+     render template: "posts/show"
     else
       flash[:error] = "Comment was not deleted. Try again."
-      redirect_to [@topic, @post]
+      render template: "posts/show"
     end
   end
 
