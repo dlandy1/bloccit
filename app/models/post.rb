@@ -69,7 +69,12 @@ class Post < ActiveRecord::Base
       update_attribute(:rank, new_rank)
     end 
 
-    
+    def save_with_initial_vote
+      ActiveRecord::Base.transaction do 
+        self.save 
+        self.up_votes
+      end
+    end
 
     private   
 
