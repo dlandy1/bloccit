@@ -1,14 +1,35 @@
 class VotesController < ApplicationController
+
+  before_filter :authenticate_user!
+
   before_action :load_post_and_vote
 
   def up_vote
-    update_vote!(1)
-    redirect_to :back
+    if @post.already_up_voted_by_user?(current_user)
+      flash[:notice] = "You already upvoted the post."
+      redirect_to :back
+    elsif @post.already_down_voted_by_user?(current_user)
+      @post.remove_down_vote!(current_user)
+      @post.up_vote!(current_user)
+      redirect_to :back
+    else
+      @post.up_vote!(current_user)
+      redirect_to :back
+    end
   end
 
   def down_vote
-    update_vote!(-1)
-    redirect_to :back
+    if @post.already_down_voted_by_user?(current_user)
+      flash[:notice] = "You already downvoted the post."
+      redirect_to :back
+    elsif @post.already_up_voted_by_user?(current_user)
+      @post.remove_up_vote!(current_user)
+      @post.down_vote!(current_user)
+      redirect_to :back
+    else
+      @post.down_vote!(current_user)
+      redirect_to :back
+    end
   end
 
   private
@@ -18,14 +39,4 @@ class VotesController < ApplicationController
       @topic = @post.topic
     end
 
-    def update_vote!(new_value)
-      if @vote
-        authorize @vote, :update?
-        @vote.update_attribute(:value, new_value)
-      else 
-        @vote = current_user.votes.build(value: new_value, post: @post)
-        authorize @vote, :create?
-        @vote.save
-      end
-    end
 end

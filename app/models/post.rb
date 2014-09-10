@@ -2,17 +2,7 @@ class Post < ActiveRecord::Base
   has_many :comments, dependent: :destroy
   has_many :votes, dependent: :destroy
     mount_uploader :image, ImageUploader
-    def up_votes
-      votes.where(value: 1).count
-    end
 
-    def down_votes
-      votes.where(value: -1).count
-    end
-
-    def points
-      votes.sum(:value)
-    end
   belongs_to :user
    belongs_to :topic
 
@@ -22,6 +12,47 @@ class Post < ActiveRecord::Base
     validates :body, length: {minimum: 20}, presence: true
     validates :topic, presence: true
     validates :user, presence: true
+
+    def already_up_voted_by_user?(voting_user)
+      vote_manager = VotesManager.new(voting_user, self)
+      vote_manager.already_up_voted?
+    end
+
+    def already_down_voted_by_user?(voting_user)
+      vote_manager = VotesManager.new(voting_user, self)
+      vote_manager.already_down_voted?
+    end
+
+    def up_votes
+      vote_manager = VotesManager.new(nil, self)
+      vote_manager.votes_count
+    end
+
+    def down_vote!(voting_user)
+      vote_manager = VotesManager.new(voting_user, self)
+      vote_manager.down_vote!
+    end
+
+    def up_vote!(voting_user)
+      vote_manager = VotesManager.new(voting_user, self)
+      vote_manager.up_vote!
+      #user.votes.create(value: 1, post: self)
+    end
+
+    def remove_up_vote!(voting_user)
+      vote_manager = VotesManager.new(voting_user, self)
+      vote_manager.remove_up_vote!
+    end
+
+    def remove_down_vote!(voting_user)
+      vote_manager = VotesManager.new(voting_user, self)
+      vote_manager.remove_down_vote!
+    end
+
+    def points
+      vote_manager = VotesManager.new(user, self)
+      vote_manager.votes_count
+    end
 
     def markdown_title
       render_as_markdown title
@@ -38,9 +69,7 @@ class Post < ActiveRecord::Base
       update_attribute(:rank, new_rank)
     end 
 
-    def create_vote
-      user.votes.create(value: 1, post: self)
-    end
+    
 
     private   
 
