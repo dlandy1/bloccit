@@ -27,7 +27,7 @@
         <%= pluralize(@post.up_votes, 'up vote') %>
       </small>
     </div>
-
+      <%= render partial: 'favorites/favorite', locals: { post: @post } %>
   </div>
 </div>
 <div class="row">

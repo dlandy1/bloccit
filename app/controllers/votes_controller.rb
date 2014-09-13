@@ -6,7 +6,7 @@ class VotesController < ApplicationController
 
   def up_vote
     if @post.already_up_voted_by_user?(current_user)
-      flash[:notice] = "You already upvoted the post."
+      flash[:error] = "You already upvoted the post."
       redirect_to :back
     elsif @post.already_down_voted_by_user?(current_user)
       @post.remove_down_vote!(current_user)
@@ -20,7 +20,7 @@ class VotesController < ApplicationController
 
   def down_vote
     if @post.already_down_voted_by_user?(current_user)
-      flash[:notice] = "You already downvoted the post."
+      flash[:error] = "You already downvoted the post."
       redirect_to :back
     elsif @post.already_up_voted_by_user?(current_user)
       @post.remove_up_vote!(current_user)
