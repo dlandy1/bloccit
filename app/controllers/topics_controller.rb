@@ -1,6 +1,6 @@
 class TopicsController < ApplicationController
   def index
-    @topics = Topic.page(params[:page]).per(10)
+    @topics = Topic.visible_to(current_user).page(params[:page]).per(10)
     authorize @topics
   end
 
