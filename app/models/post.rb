@@ -51,7 +51,7 @@ class Post < ActiveRecord::Base
     end
 
     def points
-      vote_manager = VotesManager.new(user, self)
+      vote_manager = VotesManager.new(nil, self)
       vote_manager.votes_count
     end
 
@@ -63,7 +63,7 @@ class Post < ActiveRecord::Base
       render_as_markdown body
     end
 
-    def update_rank
+   def update_rank
       age = (created_at - Time.new(1970,1,1)) / (60 * 60 * 24)
       new_rank = points + age
 
