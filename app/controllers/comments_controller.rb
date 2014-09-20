@@ -23,7 +23,6 @@ class CommentsController < ApplicationController
     if @comment.destroy
       flash[:notice] = "Comment was removed"
       render template: "posts/show"
-    end
     else
       flash[:error] = "Comment was not deleted. Try again."
       render template: "posts/show"
