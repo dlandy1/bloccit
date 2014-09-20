@@ -19,4 +19,8 @@ def authenticated_user (options={})
   user
 end
 
+def comment_without_email
+  Comment.create(user: @user, body: "A Comment")
+end
+
 end
