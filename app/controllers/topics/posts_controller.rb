@@ -27,6 +27,7 @@ class Topics::PostsController < ApplicationController
       authorize @post 
       if @post.save
          @post.up_vote!(@post.user)
+         @post.update_rank
         flash[:notice] = "Post was saved."
         redirect_to [@topic, @post]
       else

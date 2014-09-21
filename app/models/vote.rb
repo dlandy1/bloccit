@@ -7,11 +7,11 @@ class Vote < ActiveRecord::Base
   after_save :update_post
 
   def up_vote?
-    value == 1
+    post.up_vote!
   end
 
   def down_vote?
-    value == -1
+    post.down_vote!
   end
 
   private

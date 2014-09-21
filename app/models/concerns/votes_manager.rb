@@ -48,7 +48,7 @@ class VotesManager
   end
 
   def votes_count
-    REDIS.get(post_vote_key).to_i
+     REDIS.get(post_vote_key).to_i
   end
 
   def post_vote_key
