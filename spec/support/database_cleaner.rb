@@ -1,4 +1,4 @@
-RSpec.configure do
+RSpec.configure do |config|
 
   #Empty the database before each test file
 

@@ -10,6 +10,7 @@ describe User do
   end
 
     it "returns 'nil' if the user has not favorited the post" do
+       binding.pry
       expect( @user.favorited(@post) ).to eq(nil)
     end
 
@@ -23,6 +24,7 @@ describe User do
 
     before do 
       @user1 = create(:user)
+      @user2 = create(:user)
       post = create(:post, user: @user2)
       2.times { create(:comment, user: @user2, post: post) }
     end
