@@ -1,5 +1,6 @@
 class CommentsController < ApplicationController
-  
+  respond_to :html, :js
+
   def create
     @post = Post.find(params[:post_id])
     @topic = @post.topic
@@ -7,10 +8,10 @@ class CommentsController < ApplicationController
     @comment.post = @post
     authorize @comment
     if @comment.save
-       render template: "posts/show", notice: "Comment was created successfully."
+       redirect_to [@post.topic, @post], notice: "Comment was created successfully."
     else
       flash[:error] = "Error creating comment. It must be more than 5 characters. Please try again."
-      render template: "posts/show"
+      render template: "topics/posts/show"
     end
   end
 
@@ -22,11 +23,14 @@ class CommentsController < ApplicationController
     authorize @comment
     if @comment.destroy
       flash[:notice] = "Comment was removed"
-      render template: "posts/show"
     else
       flash[:error] = "Comment was not deleted. Try again."
-      render template: "posts/show"
     end
+
+    respond_with(@comment) do |format|
+      format.html { redirect_to [@post.topic, @post] }
+    end
+
   end
 
 end
