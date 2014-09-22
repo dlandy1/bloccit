@@ -3,15 +3,22 @@ class CommentsController < ApplicationController
 
   def create
     @post = Post.find(params[:post_id])
-    @topic = @post.topic
-    @comment = current_user.comments.build(params.require(:comment).permit( :body))
+    @comments = @post.comments
+
+    @comment = current_user.comments.new( comment_params )
     @comment.post = @post
+    @new_comment = Comment.new
+
     authorize @comment
+
     if @comment.save
-       redirect_to [@post.topic, @post], notice: "Comment was created successfully."
+      flash[:notice] = "Comment was created successfully."
     else
       flash[:error] = "Error creating comment. It must be more than 5 characters. Please try again."
-      render template: "topics/posts/show"
+    end
+
+    respond_with(@comment) do |format|
+      format.html { redirect_to [@post.topic, @post] }
     end
   end
 
@@ -31,6 +38,12 @@ class CommentsController < ApplicationController
       format.html { redirect_to [@post.topic, @post] }
     end
 
+  end
+
+  private
+
+  def comment_params
+    params.require(:comment).permit(:body)
   end
 
 end
